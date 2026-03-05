@@ -103,17 +103,17 @@ private:
             float gap = s.max_cell_voltage - s.min_cell_voltage;
             if (gap > cell_gap_threshold_) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000, 
-                    "\033[1;33m[警告] 电芯极差过大: %.3fV (阈值: %.2fV)\033[0m", gap, cell_gap_threshold_);
+                    "\033[1;33m[WARN] Cell gap too large: %.3fV (Threshold: %.2fV)\033[0m", gap, cell_gap_threshold_);
             }
             msg.cell_voltage = { (float)s.min_cell_voltage, (float)s.max_cell_voltage };
 
             // --- 2. SoC & Temp Monitoring ---
             if (s.percentage < low_soc_threshold_) {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 10000, 
-                    "\033[1;33m[警告] 电池电量低: %.1f%%\033[0m", s.percentage * 100.0);
+                    "\033[1;33m[WARN] Battery SoC low: %.1f%%\033[0m", s.percentage * 100.0);
             }
             if (s.temperature > over_temp_threshold_) {
-                RCLCPP_ERROR(this->get_logger(), "\033[1;31m[严重] 电池过热: %.1f°C! 请立即关机检查。\033[0m", s.temperature);
+                RCLCPP_ERROR(this->get_logger(), "\033[1;31m[CRITICAL] Battery over-temp: %.1f°C! Shutdown immediately.\033[0m", s.temperature);
             }
 
             // --- 3. 5s Status Overview ---

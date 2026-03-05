@@ -6,12 +6,12 @@ import time
 
 class BmsClient:
     """
-    BMS Daemon Python 客户端接口
-    用于通过 Unix Domain Socket 读取电池数据
+    BMS Daemon Python Client Interface
+    Used to read battery data via Unix Domain Socket
     """
-    # 结构体格式定义 (对应 C++ 中的 #pragma pack(push, 1))
+    # Struct format definition (matches #pragma pack(push, 1) in C++)
     # d: double (8 bytes), I: uint32 (4 bytes), H: uint16 (2 bytes), 33s: char[33]
-    # 总长度: 121 字节
+    # Total length: 121 bytes
     STRUCT_FORMAT = "<dddddddIHdd33sHHHI"
     STRUCT_SIZE = struct.calcsize(STRUCT_FORMAT)
 
@@ -20,7 +20,7 @@ class BmsClient:
         self.sock = None
 
     def connect(self):
-        """尝试连接到 Daemon"""
+        """Attempt to connect to the Daemon"""
         try:
             if self.sock:
                 self.close()
@@ -33,15 +33,15 @@ class BmsClient:
             return False
 
     def close(self):
-        """关闭连接"""
+        """Close the connection"""
         if self.sock:
             self.sock.close()
             self.sock = None
 
     def read_data(self):
         """
-        读取并解析一次数据
-        返回 dict 格式的结果，如果失败则返回 None
+        Read and parse data once
+        Returns a dict format result, or None if failed
         """
         if not self.sock:
             if not self.connect():
@@ -53,10 +53,10 @@ class BmsClient:
                 self.close()
                 return None
 
-            # 解析二进制数据
+            # Parse binary data
             unpacked = struct.unpack(self.STRUCT_FORMAT, data)
             
-            # 映射到字典
+            # Map to dictionary
             status = {
                 "voltage": unpacked[0],
                 "current": unpacked[1],
@@ -81,15 +81,15 @@ class BmsClient:
             return None
 
 if __name__ == "__main__":
-    # --- 简单的测试运行逻辑 ---
+    # --- Simple test run logic ---
     print("=== BMS Python Client Test ===")
     client = BmsClient()
     
     while True:
         data = client.read_data()
         if data:
-            print(f"\r[数据] 电压: {data['voltage']:.2f}V | 电流: {data['current']:.2f}A | "
-                  f"电量: {data['percentage']*100:.1f}% | 状态: 0x{data['work_state']:02X}", end="", flush=True)
+            print(f"\r[Data] Volts: {data['voltage']:.2f}V | Amps: {data['current']:.2f}A | "
+                  f"SoC: {data['percentage']*100:.1f}% | State: 0x{data['work_state']:02X}", end="", flush=True)
         else:
-            print("\r[警告] 正在等待 Daemon 数据...", end="", flush=True)
+            print("\r[WARN] Waiting for Daemon data...", end="", flush=True)
         time.sleep(1.0)

@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    # 获取包的安装路径以找到配置文件
+    # Get package installation path to find the config file
     pkg_share = get_package_share_directory('bms_ros_client')
     config_path = os.path.join(pkg_share, 'config', 'bms_params.yaml')
 
@@ -15,7 +15,7 @@ def generate_launch_description():
             name='bms_bridge',
             output='screen',
             parameters=[config_path],
-            # 允许在命令行通过 --ros-args -p 修改参数
+            # Allow parameter overriding via CLI using --ros-args -p
             arguments=['--ros-args', '--log-level', 'info']
         )
     ])
