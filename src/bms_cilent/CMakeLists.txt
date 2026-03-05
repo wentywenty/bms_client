@@ -9,7 +9,11 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-include_directories(../bms_daemon/include)
+# Try local path first, then fallback to system paths
+include_directories(
+  include
+  /usr/include/bms
+)
 
 add_executable(bms_bridge src/bms_node.cpp)
 ament_target_dependencies(bms_bridge rclcpp sensor_msgs)
