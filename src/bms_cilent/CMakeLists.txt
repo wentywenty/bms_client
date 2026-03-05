@@ -22,4 +22,11 @@ install(TARGETS bms_bridge
   DESTINATION lib/${PROJECT_NAME}
 )
 
+# Install launch and config directories
+install(DIRECTORY
+  launch
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()

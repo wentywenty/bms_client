@@ -1,0 +1,15 @@
+bms_bridge:
+  ros__parameters:
+    # --- 通讯配置 ---
+    socket_path: "/tmp/bms.sock"
+    publish_rate: 1.0
+    
+    # --- 消息元数据 ---
+    frame_id: "battery_link"
+    location: "base_link"
+    design_capacity: 6.0
+    
+    # --- 诊断与安全阈值 ---
+    over_temp_threshold: 55.0    # 二级过热关断阈值 (摄氏度)
+    low_soc_warn_threshold: 0.15 # 低电量告警阈值 (15%)
+    cell_gap_warn_threshold: 0.1 # 电芯极差告警阈值 (0.1V)
